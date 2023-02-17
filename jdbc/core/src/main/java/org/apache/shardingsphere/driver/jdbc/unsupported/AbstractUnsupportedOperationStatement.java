@@ -44,12 +44,12 @@ public abstract class AbstractUnsupportedOperationStatement extends WrapperAdapt
     }
     
     @Override
-    public final void closeOnCompletion() throws SQLException {
+    public void closeOnCompletion() throws SQLException {
         throw new SQLFeatureNotSupportedException("closeOnCompletion");
     }
     
     @Override
-    public final boolean isCloseOnCompletion() throws SQLException {
+    public boolean isCloseOnCompletion() throws SQLException {
         throw new SQLFeatureNotSupportedException("isCloseOnCompletion");
     }
     

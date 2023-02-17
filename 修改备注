@@ -1,0 +1,2 @@
+1、处理不支持游标操作
+2、插入语句包含ON CONFLICT(xxx) DO NOTHING 时因为没有setClauseList而产生null异常

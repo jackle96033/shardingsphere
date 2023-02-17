@@ -30,6 +30,7 @@ import org.apache.shardingsphere.infra.database.type.dialect.PostgreSQLDatabaseT
 import org.apache.shardingsphere.mode.metadata.MetaDataContexts;
 
 import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
 import java.sql.SQLWarning;
 import java.sql.Statement;
 import java.util.Collection;
@@ -191,6 +192,31 @@ public abstract class AbstractStatementAdapter extends AbstractUnsupportedOperat
         } finally {
             getRoutedStatements().clear();
         }
+    }
+    
+    @Override
+    public void closeOnCompletion() throws SQLException {
+        Collection<? extends Statement> routedCollect = getRoutedStatements();
+        if (routedCollect.size() == 1) {
+            for (Statement statement : routedCollect) {
+                statement.closeOnCompletion();
+            }
+        } else {
+            throw new SQLFeatureNotSupportedException("multi routedStatement is not support closeOnCompletion");
+        }
+    }
+    
+    @Override
+    public boolean isCloseOnCompletion() throws SQLException {
+        Collection<? extends Statement> routedCollect = getRoutedStatements();
+        if (routedCollect.size() == 1) {
+            for (Statement statement : routedCollect) {
+                return statement.isCloseOnCompletion();
+            }
+        } else {
+            throw new SQLFeatureNotSupportedException("multi routedStatement is not support isCloseOnCompletion");
+        }
+        return false;
     }
     
     protected final void handleExceptionInTransaction(final ShardingSphereConnection connection, final MetaDataContexts metaDataContexts) {
